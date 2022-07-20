@@ -1,13 +1,13 @@
 const http = require("http");
-const routes = require('./routes');
 const { URL } = require("url");
+const routes = require('./routes');
+const bodyParser = require("./helpers/bodyParser");
 
 
 const server = http.createServer((request, response) => {
   const parsedUrl = new URL(`http://localhost:3000${request.url}`);
   
   console.log(`Request method: ${request.method} | Endpoint: ${parsedUrl.pathname}`);
-  console.log(parsedUrl);
   
   let { pathname } = parsedUrl;
   let id = null;
@@ -32,7 +32,12 @@ const server = http.createServer((request, response) => {
       response.end(JSON.stringify( body ));
     }
 
-    route.handler(request, response);
+    if(['POST', 'PUT', 'PATCH'].includes(route.method)){
+      bodyParser(request, () => route.handler(request, response));
+    } else {
+      route.handler(request, response);
+    }
+
   } else {
     response.writeHead(404, { 'Content-type': 'text/html'});
     response.end(`Cannot ${request.method} ${parsedUrl.pathname}`);
