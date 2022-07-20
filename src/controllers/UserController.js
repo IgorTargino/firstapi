@@ -49,21 +49,20 @@ module.exports = {
 
     const user = users.find((user) => user.id === id);
 
-    if(!user){
-      return response.send(400, { error: 'User not found'});
-    };
+    if (!user) {
+      return response.send(400, { error: "User not found" });
+    }
 
     users = users.map((user) => {
-      if(user.id === id){
+      if (user.id === id) {
         return {
           ...user,
-          name
+          name,
         };
       }
 
       return user;
     });
-
 
     response.send(200, { id, name });
   },
@@ -73,16 +72,14 @@ module.exports = {
 
     id = Number(id);
 
-
     const user = users.find((user) => user.id === id);
 
-    if(!user){
-      return response.send(400, { error: 'User not found'});
-    };
+    if (!user) {
+      return response.send(400, { error: "User not found" });
+    }
 
     users = users.filter((user) => user.id !== id);
 
-    response.send(200, { deleted: true })
-
-  }
+    response.send(200, { deleted: true });
+  },
 };
